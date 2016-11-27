@@ -22,7 +22,7 @@
                 };
 
                 //HTTP POST/PUT methods for add/edit employee
-                $scope.submitEmployee = function($event) {
+                $scope.submitEmployee = function() {
 
                     var method = "";
                     var url = "";
@@ -32,8 +32,8 @@
                         url = '/users';
                     } else {
                         //If Id is present, it's edit operation - PUT operation
-                        method = "POST";
-                        url = 'users/' + $scope.form.id;
+                        method = "PUT";
+                        url = 'users/:' + $scope.form.id;
                     }
 
                     $http({
@@ -50,7 +50,11 @@
                 $scope.removeEmployee = function(employee) {
                     $http({
                         method : 'DELETE',
-                        url : 'users/' + employee.id
+                        url : 'users/:' + employee.id,
+                        //data : angular.toJson($scope.form),
+                        //headers : {
+                          //  'Content-Type' : 'application/json'
+                        //}
                     }).then(_success, _error);
                 };
 
@@ -76,7 +80,7 @@
                 }
 
                 function _success(response) {
-                    alert("REsponse after post");
+                 //   alert("REsponse after post");
                     _refreshPageData();
                     _clearForm()
                 }

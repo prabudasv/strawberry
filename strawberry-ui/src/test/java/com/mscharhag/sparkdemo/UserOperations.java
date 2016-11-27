@@ -1,14 +1,8 @@
 package com.mscharhag.sparkdemo;
 
 import com.google.gson.Gson;
-import spark.utils.IOUtils;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import static com.mscharhag.sparkdemo.JsonUtil.json;
-import static org.junit.Assert.fail;
 import static spark.Spark.*;
 
 
@@ -24,7 +18,7 @@ public class UserOperations {
         staticFiles.location("/public");
         get("/", (rq, res) -> "INDEX");
 
-//        UserControllerIntegrationTest userControllerIntegrationTest = new UserControllerIntegrationTest();
+  //      UserControllerIntegrationTest userControllerIntegrationTest = new UserControllerIntegrationTest();
   //      userControllerIntegrationTest.request("POST", "/users?name=user3&email=user3@foobar.com");
         UserService userService = new UserService();
         post("/users", (req, res) -> {
@@ -38,7 +32,26 @@ public class UserOperations {
         get("/users", (req, res) -> userService.getAllUsers(), json());
 
         exception(Exception.class, (ex, req, res) -> ex.printStackTrace());
+    }
 
+    public void updateUser()
+    {
+        Gson gson = new Gson();
+        staticFiles.location("/public");
+        put("/", (rq, res) -> "INDEX");
+
+        UserService userService = new UserService();
+        put("/users/:id", (req, res) -> {
+            String jsonBody = req.body();
+            User user = gson.fromJson(jsonBody, User.class);
+            System.out.println(jsonBody);
+            userService.createUser(user.getName(), user.getEmail());
+            return jsonBody;
+        }, json());
+
+        get("/users", (req, res) -> userService.getAllUsers(), json());
+
+        exception(Exception.class, (ex, req, res) -> ex.printStackTrace());
 
     }
 }

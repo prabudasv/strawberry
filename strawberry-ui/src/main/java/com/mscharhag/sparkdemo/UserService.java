@@ -1,6 +1,9 @@
 package com.mscharhag.sparkdemo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UserService {
 
@@ -19,18 +22,38 @@ public class UserService {
 		failIfInvalid(name, email);
 		User user = new User(name, email);
 		users.put(user.getId(), user);
+		System.out.println("User ID is " + user.getId());
+		System.out.println( "Size of user array is " + users.size());
 		return user;
 	}
 
 	public User updateUser(String id, String name, String email) {
+		System.out.println( "Got request for updating user ... ");
+		System.out.println( "Size of user array is " + users.size());
 		User user = users.get(id);
+		System.out.println( "Size of user array is " + getAllUsers().size());
 		if (user == null) {
 			throw new IllegalArgumentException("No user with id '" + id + "' found");
 		}
 		failIfInvalid(name, email);
 		user.setName(name);
 		user.setEmail(email);
+
 		return user;
+	}
+
+	public void deleteUser(String id, String name, String email) {
+		System.out.println( "Got request for deleting user ... ");
+		System.out.println( "Size of user array is " + users.size());
+		User user = users.get(id);
+		users.remove(id);
+		System.out.println( "Size of user array is " + getAllUsers().size());
+		if (user == null) {
+			throw new IllegalArgumentException("No user with id '" + id + "' found");
+		}
+		failIfInvalid(name, email);
+
+
 	}
 
 	private void failIfInvalid(String name, String email) {
